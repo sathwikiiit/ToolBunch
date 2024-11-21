@@ -25,7 +25,7 @@ Tool Bunch is a versatile Android application designed to provide efficient calc
 
 ### Calculation Mechanisms
 - Land Size: 1 Acre = 40 Guntas
-- Court Fee: 5% of suit value
+- Court Fee: As per Legal Standards (TSCV Act)
 - Precise decimal handling
 
 ## 🔧 Installation Requirements
