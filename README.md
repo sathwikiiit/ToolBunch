@@ -38,4 +38,10 @@ Tool Bunch is a versatile Android application designed to provide efficient calc
 ### Quick Setup
 1. Clone Repository
 ```bash
-git clone https://github.com/yourusername/toolbunch.git
+git clone https://github.com/sathwikiiit/toolbunch.git
+```
+## Scope
+- Including categories for court Fee Calculations
+- Adding more tools to support legal purposes
+- Adding a Scanner tool that can scan documents
+- send data to PC through wired and wireless communication
