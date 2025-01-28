@@ -29,9 +29,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun LandSizeCalculator(navController: NavHostController) {
+fun LandSizeCalculator(navController: NavHostController= rememberNavController(),sharedViewModel: CalculatorViewModel) {
     var acres by remember { mutableStateOf("") }
     var guntas by remember { mutableStateOf("") }
     var totalGuntas by remember { mutableDoubleStateOf(0.0) }
@@ -66,11 +67,11 @@ fun LandSizeCalculator(navController: NavHostController) {
                 Spacer(modifier = Modifier.width(8.dp))
                 OutlinedTextField(
                     value = guntas,
-                    onValueChange = { guntas = it },
+                    onValueChange = { guntas = if (it.length <= 2) it else it.substring(0, 2) },
                     label = { Text("Gts.") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.weight(1f),
-                    textStyle = TextStyle( color = Color.Black, fontSize = 16.sp)
+                    textStyle = TextStyle( color = Color.Black, fontSize = 16.sp),
                 )
             }
 
@@ -138,12 +139,10 @@ fun LandSizeCalculator(navController: NavHostController) {
                     .fillMaxWidth(0.9f)
                     .align(Alignment.CenterHorizontally),
                 onClick = {
-                    navController.currentBackStackEntry
-                        ?.savedStateHandle
-                        ?.set("marketValue", totalMarketValue)
-                    navController.navigate("second")
+                    sharedViewModel.marketValue = totalMarketValue
+                    navController.navigate("third")
                 }) {
-                Text("Go to CourtFeeCalculator")
+                Text("Go to Calculator")
             }
 
 

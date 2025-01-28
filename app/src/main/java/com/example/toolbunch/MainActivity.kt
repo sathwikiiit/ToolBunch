@@ -1,10 +1,10 @@
 package com.example.toolbunch
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,44 +21,47 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.toolbunch.ui.theme.ToolBunchTheme
 
+class CalculatorViewModel : ViewModel() {
+    private var _marketValue = mutableStateOf(0.0) // Backing field
+    var marketValue: Double
+        get() = _marketValue.value
+        set(value) {
+            _marketValue.value = value // Custom setter
+        }
+}
+
 class MainActivity : ComponentActivity() {
+    private val sharedViewModel: CalculatorViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             ToolBunchTheme {
-                NavigationGraph()
+                NavigationGraph(sharedViewModel)
             }
         }
     }
     @Composable
-    fun NavigationGraph() {
+    fun NavigationGraph(sharedViewModel:CalculatorViewModel) {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = "grid") {
-            composable("grid") { GridScreen(navController) }
-            composable("first") { LandSizeCalculator(navController) }
-            composable("second") {
-                val marketValue = navController.previousBackStackEntry
-                    ?.savedStateHandle
-                    ?.get<Double>("marketValue") ?: 0.0
-                Log.println(Log.INFO,"MainActivity","Log $marketValue")
-
-                CourtFeeCalculator(
-                    numericValue = marketValue
-                )
-            }
-
+            composable("grid") { GridScreen(navController, sharedViewModel) }
+            composable("first") { LandSizeCalculator(navController, sharedViewModel) }
+            composable("second") { CourtFeeCalculator(navController, sharedViewModel) }
+            composable("third") { Calculator(navController, sharedViewModel) }
         }
+
     }
 
     @Composable
-    fun GridScreen(navController: NavHostController) {
+    fun GridScreen(navController: NavHostController, sharedViewModel: CalculatorViewModel) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -80,6 +83,12 @@ class MainActivity : ComponentActivity() {
                     CalculatorCard(
                         title = "Court Fee Calculator",
                         onClick = { navController.navigate("second") }
+                    )
+                }
+                item {
+                    CalculatorCard(
+                        title = "Calculator",
+                        onClick = { navController.navigate("third") }
                     )
                 }
             }
@@ -111,7 +120,6 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun GreetingPreview() {
         ToolBunchTheme {
-            LandSizeCalculator(rememberNavController())
         }
     }
 }

@@ -24,13 +24,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import java.text.NumberFormat
 import java.util.Locale
 import kotlin.math.ceil
 
 
 @Composable
-fun CourtFeeCalculator(numericValue:Double=0.0) {
+fun CourtFeeCalculator(navController: NavHostController,sharedViewModel: CalculatorViewModel) {
+    val numericValue = sharedViewModel.marketValue
     val currencyFormatter = NumberFormat.getCurrencyInstance(Locale("en", "IN"))
     var formattedValue by remember { mutableStateOf(currencyFormatter.format(numericValue)) }
     var courtFee by remember { mutableStateOf(currencyFormatter.format(0.0)) } // State variable for court fee
