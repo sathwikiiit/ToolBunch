@@ -113,7 +113,7 @@ fun Calculator(navController: NavHostController= rememberNavController(),sharedV
                 .align(Alignment.CenterHorizontally),
             onClick = {
                 sharedViewModel.marketValue = result
-                navController.navigate("second")
+                navController.navigate("cFee")
             }) {
             Text("Go to CourtFeeCalculator")
         }

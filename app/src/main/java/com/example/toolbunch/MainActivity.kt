@@ -29,11 +29,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.toolbunch.ui.theme.ToolBunchTheme
 
 class CalculatorViewModel : ViewModel() {
-    private var _marketValue = mutableStateOf(0.0) // Backing field
+    private var _marketValue = mutableDoubleStateOf(0.0) // Backing field
     var marketValue: Double
-        get() = _marketValue.value
+        get() = _marketValue.doubleValue
         set(value) {
-            _marketValue.value = value // Custom setter
+            _marketValue.doubleValue = value // Custom setter
         }
 }
 
@@ -52,16 +52,18 @@ class MainActivity : ComponentActivity() {
     fun NavigationGraph(sharedViewModel:CalculatorViewModel) {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = "grid") {
-            composable("grid") { GridScreen(navController, sharedViewModel) }
-            composable("first") { LandSizeCalculator(navController, sharedViewModel) }
-            composable("second") { CourtFeeCalculator(navController, sharedViewModel) }
-            composable("third") { Calculator(navController, sharedViewModel) }
+            composable("grid") { GridScreen(navController) }
+            composable("szCalc") { LandSizeCalculator(navController, sharedViewModel) }
+            composable("cFee") { CourtFeeCalculator(navController, sharedViewModel) }
+            composable("calc") { Calculator(navController, sharedViewModel) }
+            composable("legalSearch"){
+                LegalSearch()
+            }
         }
-
     }
 
     @Composable
-    fun GridScreen(navController: NavHostController, sharedViewModel: CalculatorViewModel) {
+    fun GridScreen(navController: NavHostController) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -76,19 +78,25 @@ class MainActivity : ComponentActivity() {
                 item {
                     CalculatorCard(
                         title = "Land Size Calculator",
-                        onClick = { navController.navigate("first") }
+                        onClick = { navController.navigate("szCalc") }
                     )
                 }
                 item {
                     CalculatorCard(
                         title = "Court Fee Calculator",
-                        onClick = { navController.navigate("second") }
+                        onClick = { navController.navigate("cFee") }
                     )
                 }
                 item {
                     CalculatorCard(
                         title = "Calculator",
-                        onClick = { navController.navigate("third") }
+                        onClick = { navController.navigate("calc") }
+                    )
+                }
+                item{
+                    CalculatorCard(
+                        title = "Legal Search",
+                        onClick = { navController.navigate("legalSearch") }
                     )
                 }
             }
@@ -120,6 +128,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun GreetingPreview() {
         ToolBunchTheme {
+            var db = DbHelper(context = this)
         }
     }
 }

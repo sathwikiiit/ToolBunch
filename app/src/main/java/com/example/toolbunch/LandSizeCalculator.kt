@@ -140,7 +140,7 @@ fun LandSizeCalculator(navController: NavHostController= rememberNavController()
                     .align(Alignment.CenterHorizontally),
                 onClick = {
                     sharedViewModel.marketValue = totalMarketValue
-                    navController.navigate("third")
+                    navController.navigate("calc")
                 }) {
                 Text("Go to Calculator")
             }
